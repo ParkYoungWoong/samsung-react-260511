@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "react-vite-scaffold": {
+      "source": "ParkYoungWoong/skills",
+      "sourceType": "github",
+      "skillPath": "skills/react-vite-scaffold/SKILL.md",
+      "computedHash": "8265d032d8e045fdb28e8ac59fe37b0f289a150bd954e94664ef7b3e427abd0e"
+    }
+  }
+}
