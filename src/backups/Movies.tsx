@@ -1,16 +1,8 @@
 import { useState, useEffect } from 'react'
 
-export interface ResponseValue {
-  Search: Movie[]
-  totalResults: string
-  Response: string
-}
-export interface Movie {
-  Title: string
-  Year: string
+interface Movie {
   imdbID: string
-  Type: string
-  Poster: string
+  Title: string
 }
 
 export default function App() {
@@ -20,7 +12,7 @@ export default function App() {
   useEffect(() => {
     async function fetchMovies() {
       const res = await fetch('https://omdbapi.com?apikey=7035c60c&s=spider')
-      const data: ResponseValue = await res.json()
+      const data = await res.json()
       setMovies(data.Search)
     }
     fetchMovies()
