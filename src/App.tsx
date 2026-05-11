@@ -1,34 +1,23 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function App() {
-  const [count, setCount] = useState(0)
-  // const [active, setActive] = useState('active')
-  const [isActive, setIsActive] = useState(false)
+  const [movies, setMovies] = useState([])
+
+  // 최초 1번만 실행하기
+  useEffect(() => {
+    async function fetchMovies() {
+      const res = await fetch('https://omdbapi.com?apikey=7035c60c&s=spider')
+      const data = await res.json()
+      setMovies(data.Search)
+    }
+    fetchMovies()
+  }, [])
 
   return (
     <>
-      <h1 className={isActive ? 'active' : ''}>{count}</h1>
-      <button
-        onClick={() => {
-          setIsActive(!isActive)
-        }}>
-        토글
-      </button>
-      <input
-        type="number"
-        value={count}
-        onChange={event => {
-          setCount(Number(event.target.value))
-        }}
-      />
-      <button
-        onClick={() => {
-          const value = count + 1
-          setCount(value)
-          console.log(value)
-        }}>
-        클릭
-      </button>
+      {movies.map(movie => {
+        return <div>{movie.Title}</div>
+      })}
     </>
   )
 }
