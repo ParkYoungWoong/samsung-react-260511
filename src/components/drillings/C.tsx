@@ -1,5 +1,10 @@
 import D from './D'
 
 export default function C() {
-  return <D />
+  return (
+    <>
+      <h1>C</h1>
+      <D />
+    </>
+  )
 }

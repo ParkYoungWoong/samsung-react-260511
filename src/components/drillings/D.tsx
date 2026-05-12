@@ -1,11 +1,10 @@
-import { useContext } from 'react'
-import { ColorContext } from '@/App'
+import { useColor } from '@/contexts/color/value'
 
 export default function D() {
-  const color = useContext(ColorContext)
+  const color = useColor()
   return (
     <>
-      <h1>{color}</h1>
+      <h1>D: {color}</h1>
     </>
   )
 }

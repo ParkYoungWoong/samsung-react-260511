@@ -1,13 +1,12 @@
-import { useState, createContext } from 'react'
+import { useState } from 'react'
 import A from '@/components/drillings/A'
 
-export const ColorContext = createContext('red')
-
 export default function App() {
-  const [color] = useState('red')
+  const [color] = useState('green')
   return (
-    <ColorContext.Provider value={color}>
+    <>
+      <h1>App.tsx</h1>
       <A />
-    </ColorContext.Provider>
+    </>
   )
 }
