@@ -1,19 +1,13 @@
-import TextField from '@/components/TextField'
-import Button from '@/components/Button'
+import { useState, createContext } from 'react'
+import A from '@/components/drillings/A'
+
+export const ColorContext = createContext('red')
 
 export default function App() {
+  const [color] = useState('red')
   return (
-    <>
-      <TextField
-        label="이메일"
-        type="email"
-      />
-      <TextField
-        label="비밀번호"
-        type="password"
-      />
-      <Button onClick={() => {}}>로그인</Button>
-      <button>별개 버튼</button>
-    </>
+    <ColorContext.Provider value={color}>
+      <A />
+    </ColorContext.Provider>
   )
 }

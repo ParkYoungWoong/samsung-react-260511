@@ -7,7 +7,14 @@ export default function TextField({ label, ...restProps }: Props) {
     <>
       <label>
         {label && <span>{label}</span>}
-        <input {...restProps} />
+        <input
+          {...restProps}
+          className={[
+            'h-[36px] min-w-[200px]',
+            'px-[10px]',
+            'rounded-lg border border-gray-500'
+          ].join(' ')}
+        />
       </label>
     </>
   )
