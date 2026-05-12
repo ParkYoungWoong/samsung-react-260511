@@ -1,9 +1,18 @@
-import Child from '@/components/Child'
+import TextField from '@/components/TextField'
+import Button from '@/components/Button'
 
 export default function App() {
   return (
     <>
-      <Child />
+      <TextField
+        label="이메일"
+        type="email"
+      />
+      <TextField
+        label="비밀번호"
+        type="password"
+      />
+      <Button></Button>
     </>
   )
 }
