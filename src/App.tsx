@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 
 export interface ResponseValue {
   Search: Movie[]
@@ -26,10 +26,20 @@ export default function App() {
     fetchMovies()
   }, [])
 
+  useEffect(() => {
+    console.log('Movies 배열이 변경되었습니다!', movies)
+  }, [movies])
+
   return (
     <>
       {movies.map(movie => (
-        <div key={movie.imdbID}>{movie.Title}</div>
+        <Fragment key={movie.imdbID}>
+          <div>{movie.Title}</div>
+          <img
+            src={movie.Poster}
+            alt={movie.Title}
+          />
+        </Fragment>
       ))}
     </>
   )

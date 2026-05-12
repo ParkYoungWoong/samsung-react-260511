@@ -1,8 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 
-interface Movie {
-  imdbID: string
+export interface ResponseValue {
+  Search: Movie[]
+  totalResults: string
+  Response: string
+}
+export interface Movie {
   Title: string
+  Year: string
+  imdbID: string
+  Type: string
+  Poster: string
 }
 
 export default function App() {
@@ -12,16 +20,26 @@ export default function App() {
   useEffect(() => {
     async function fetchMovies() {
       const res = await fetch('https://omdbapi.com?apikey=7035c60c&s=spider')
-      const data = await res.json()
+      const data: ResponseValue = await res.json()
       setMovies(data.Search)
     }
     fetchMovies()
   }, [])
 
+  useEffect(() => {
+    console.log('Movies 배열이 변경되었습니다!', movies)
+  }, [movies])
+
   return (
     <>
       {movies.map(movie => (
-        <div key={movie.imdbID}>{movie.Title}</div>
+        <Fragment key={movie.imdbID}>
+          <div>{movie.Title}</div>
+          <img
+            src={movie.Poster}
+            alt={movie.Title}
+          />
+        </Fragment>
       ))}
     </>
   )
