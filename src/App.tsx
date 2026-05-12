@@ -12,7 +12,8 @@ export default function App() {
         label="비밀번호"
         type="password"
       />
-      <Button></Button>
+      <Button onClick={() => {}}>로그인</Button>
+      <button>별개 버튼</button>
     </>
   )
 }
