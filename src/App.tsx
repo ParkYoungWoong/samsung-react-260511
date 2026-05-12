@@ -1,12 +1,14 @@
-import A from '@/components/drillings/A'
-import { useColorStore } from '@/stores/color'
+import { useCountStore } from '@/stores/count'
 
 export default function App() {
-  const color = useColorStore(s => s.color)
+  const count = useCountStore(s => s.count)
+  const increase = useCountStore(s => s.increase)
+  const decrease = useCountStore(s => s.decrease)
   return (
     <>
-      <h1>App: {color}</h1>
-      <A />
+      <h1>{count}</h1>
+      <button onClick={() => increase()}>증가</button>
+      <button onClick={() => decrease()}>감소</button>
     </>
   )
 }
