@@ -7,18 +7,23 @@ export const useCountStore = create(
       count: 0,
       double: 0
     },
-    (set, get) => ({
-      increase() {
-        const { count } = get()
-        set({
-          count: count + 1
-        })
-      },
-      decrease() {
-        set(({ count }) => ({
-          count: count - 1
-        }))
+    (set, get) => {
+      return {
+        increase() {
+          const { count } = get()
+          set({
+            count: count + 1,
+            double: (count + 1) * 2
+          })
+        },
+        decrease() {
+          set(({ count }) => {
+            return {
+              count: count - 1
+            }
+          })
+        }
       }
-    })
+    }
   )
 )
