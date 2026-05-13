@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { combine } from 'zustand/middleware'
+import { combine, devtools } from 'zustand/middleware'
 
 export interface ResponseValue {
   Search: Movie[]
@@ -15,27 +15,29 @@ export interface Movie {
 }
 
 export const useMovieStore = create(
-  combine(
-    {
-      movies: [] as Movie[],
-      searchText: ''
-    },
-    (set, get) => ({
-      setSearchText(searchText: string) {
-        set({ searchText })
+  devtools(
+    combine(
+      {
+        movies: [] as Movie[],
+        searchText: ''
       },
-      // fetchMovies: async function () {}
-      async fetchMovies() {
-        const { searchText } = get()
-        if (searchText.trim().length < 3) return
-        const res = await fetch(
-          `https://omdbapi.com?apikey=7035c60c&s=${searchText}`
-        )
-        const data: ResponseValue = await res.json()
-        set({
-          movies: data.Search
-        })
-      }
-    })
+      (set, get) => ({
+        setSearchText(searchText: string) {
+          set({ searchText })
+        },
+        // fetchMovies: async function () {}
+        async fetchMovies() {
+          const { searchText } = get()
+          if (searchText.trim().length < 3) return
+          const res = await fetch(
+            `https://omdbapi.com?apikey=7035c60c&s=${searchText}`
+          )
+          const data: ResponseValue = await res.json()
+          set({
+            movies: data.Search
+          })
+        }
+      })
+    )
   )
 )
