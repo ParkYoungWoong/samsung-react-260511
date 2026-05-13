@@ -3,6 +3,8 @@ import Default from '@/routes/layouts/Default'
 import Home from '@/routes/pages/Home'
 import About from '@/routes/pages/About'
 import SignIn from '@/routes/pages/SignIn'
+import Movies from '@/routes/pages/Movies'
+import MovieDetails from '@/routes/pages/MovieDetails'
 
 // http:://localhost:5173/ => /index.html
 // http:://localhost:5173/about => /about/index.html => 리다이렉트 => /index.html
@@ -24,6 +26,14 @@ const router = createBrowserRouter([
       {
         path: '/signin',
         element: <SignIn />
+      },
+      {
+        path: '/movies',
+        element: <Movies />
+      },
+      {
+        path: '/movies/:movieId',
+        element: <MovieDetails />
       }
     ]
   }
