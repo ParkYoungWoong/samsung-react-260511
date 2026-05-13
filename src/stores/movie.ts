@@ -14,13 +14,16 @@ export interface Movie {
   Poster: string
 }
 
-create(
+export const useMovieStore = create(
   combine(
     {
       movies: [] as Movie[],
       searchText: ''
     },
     (set, get) => ({
+      setSearchText(searchText: string) {
+        set({ searchText })
+      },
       // fetchMovies: async function () {}
       async fetchMovies() {
         const { searchText } = get()
