@@ -6,6 +6,7 @@ import SignIn from '@/routes/pages/SignIn'
 import Movies from '@/routes/pages/Movies'
 import MovieDetails from '@/routes/pages/MovieDetails'
 import NotFound from '@/routes/pages/NotFound'
+import { requiresAuth } from '@/routes/loaders/requiresAuth'
 
 // http:://localhost:5173/ => /index.html
 // http:://localhost:5173/about => /about/index.html => 리다이렉트 => /index.html
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
       {
         path: '/movies',
         element: <Movies />,
-        loader: async () => {},
+        loader: requiresAuth,
         children: [
           {
             path: '/movies/:movieId',
