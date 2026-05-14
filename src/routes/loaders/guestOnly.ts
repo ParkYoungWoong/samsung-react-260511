@@ -1,6 +1,7 @@
 import { redirect } from 'react-router'
+import { validateUser } from '@/utils'
 
-export async function guestOnly() {
+export function guestOnly() {
   if (validateUser()) {
     return redirect('/')
   }

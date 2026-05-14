@@ -1,12 +1,16 @@
 import TextField from '@/components/TextField'
 import Button from '@/components/Button'
-import { useNavigate } from 'react-router'
+import { useNavigate, useSearchParams } from 'react-router'
 import { useState } from 'react'
 
 export default function SignIn() {
   const navigate = useNavigate()
   const [id, setId] = useState('')
   const [pw, setPw] = useState('')
+  const [searchParams] = useSearchParams()
+  const returnUrl = searchParams.get('returnUrl') // '/movies'
+  // https://heropy.dev/about/email?a=1&b=2&returnUrl=/movies&c=7
+  // https://heropy.dev/about/email?a=1&b=2&c=7
 
   function signIn() {
     // 로그인 성공 시 처리!
@@ -16,7 +20,7 @@ export default function SignIn() {
       const accessToken =
         '사용자이름:박영웅,나이:85,이메일:abc@xyz.com,사진:https://...' // 서버에서 응답 받은 토큰 정보
       localStorage.setItem('samsung_token', accessToken) // 토큰 저장
-      navigate('/') // 로그인 완료 후 메인 페이지로 이동
+      navigate(returnUrl || '/') // 로그인 완료 후 메인 페이지로 이동
     }
 
     // 로그인 실패 시 처리
