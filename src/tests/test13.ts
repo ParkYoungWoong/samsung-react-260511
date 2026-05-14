@@ -19,3 +19,17 @@ function log() {
 const promise = log()
 const value = await promise
 console.log(value) // 123
+
+interface User {
+  name: string
+  age?: number
+  isValid?: boolean
+}
+
+const user: User = {
+  name: 'HEROPY',
+  age: 85
+}
+
+const { age, isValid = false } = user
+console.log(age, isValid) // 85 false
