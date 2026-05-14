@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import { useParams, useNavigate } from 'react-router'
+import Modal from '@/components/Modal'
 
 export interface MovieDetails {
   Title: string
@@ -36,6 +37,7 @@ export interface Rating {
 // http://localhost:5173/movies/tt0413300
 
 export default function MovieDetails() {
+  const navigate = useNavigate()
   const { movieId } = useParams()
   const [movie, setMovie] = useState<MovieDetails | null>(null)
 
@@ -48,11 +50,10 @@ export default function MovieDetails() {
       setMovie(movie)
     }
     fetchMovieDetails()
-    // eslint-disable-next-line
-  }, [])
+  }, [movieId])
 
   return (
-    <>
+    <Modal onClose={() => navigate('/movies')}>
       {movie && (
         <>
           <h1 className="text-[60px]">{movie.Title}</h1>
@@ -74,6 +75,6 @@ export default function MovieDetails() {
           </ul>
         </>
       )}
-    </>
+    </Modal>
   )
 }
