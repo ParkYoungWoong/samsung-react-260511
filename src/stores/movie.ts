@@ -2,9 +2,10 @@ import { create } from 'zustand'
 import { combine, devtools } from 'zustand/middleware'
 
 export interface ResponseValue {
-  Search: Movie[]
-  totalResults: string
-  Response: string
+  Search?: Movie[]
+  totalResults?: string
+  Response: 'True' | 'False'
+  Error?: string
 }
 export interface Movie {
   Title: string
@@ -34,7 +35,7 @@ export const useMovieStore = create(
           )
           const data: ResponseValue = await res.json()
           set({
-            movies: data.Search
+            movies: data.Search || []
           })
         }
       })

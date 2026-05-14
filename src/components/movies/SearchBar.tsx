@@ -12,6 +12,7 @@ export default function SearchBar() {
         value={searchText}
         onChange={event => setSearchText(event.target.value)}
         onKeyDown={event => {
+          if (event.nativeEvent.isComposing) return
           if (event.key === 'Enter') fetchMovies()
         }}
       />

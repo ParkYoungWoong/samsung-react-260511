@@ -63,6 +63,15 @@ export default function MovieDetails() {
           <p>{movie.Director}</p>
           <p>{movie.Actors}</p>
           <p>{movie.Plot}</p>
+          <ul>
+            {movie.Ratings.map(rating => {
+              return (
+                <li key={rating.Source}>
+                  {rating.Source} - {rating.Value}
+                </li>
+              )
+            })}
+          </ul>
         </>
       )}
     </>
