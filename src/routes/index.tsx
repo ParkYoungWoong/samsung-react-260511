@@ -32,6 +32,7 @@ const MovieDetails = dynamic(
   options
 )
 const NotFound = dynamic(() => import('@/routes/pages/NotFound'), options)
+const Todos = dynamic(() => import('@/routes/pages/Todos'), options)
 
 // http:://localhost:5173/ => /index.html
 // http:://localhost:5173/about => /about/index.html => 리다이렉트 => /index.html
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
             element: <MovieDetails />
           }
         ]
+      },
+      {
+        path: '/todos',
+        element: <Todos />
       },
       {
         path: '*',
