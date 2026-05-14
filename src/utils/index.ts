@@ -1,6 +1,3 @@
-export function validateUser() {
-  const accessToken = localStorage.getItem('samsung_token')
-  // 토큰 분석...
-  const isValid = !!accessToken // 인증 여부 확인
-  return isValid
-}
+export { default as dynamic } from './dynamic'
+export type { DynamicOptions as DynamicOptions } from './dynamic'
+export { default as validateUser } from './validateUser'

@@ -1,4 +1,3 @@
-import { lazy, Suspense } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import Default from '@/routes/layouts/Default'
 // import Home from '@/routes/pages/Home'
@@ -7,16 +6,32 @@ import Default from '@/routes/layouts/Default'
 // import Movies from '@/routes/pages/Movies'
 // import MovieDetails from '@/routes/pages/MovieDetails'
 // import NotFound from '@/routes/pages/NotFound'
-import { requiresAuth } from '@/routes/loaders/requiresAuth'
-import { guestOnly } from '@/routes/loaders/guestOnly'
+// import { requiresAuth } from '@/routes/loaders/requiresAuth'
+// import { guestOnly } from '@/routes/loaders/guestOnly'
+import { guestOnly, requiresAuth } from '@/routes/loaders'
 import Loader from '@/components/Loader'
+import { dynamic } from '@/utils'
+import type { DynamicOptions } from '@/utils'
 
-const Home = lazy(() => import('@/routes/pages/Home'))
-const About = lazy(() => import('@/routes/pages/About'))
-const SignIn = lazy(() => import('@/routes/pages/SignIn'))
-const Movies = lazy(() => import('@/routes/pages/Movies'))
-const MovieDetails = lazy(() => import('@/routes/pages/MovieDetails'))
-const NotFound = lazy(() => import('@/routes/pages/NotFound'))
+const options: DynamicOptions = {
+  // error: () => <div>나만의 에러 메시지</div>
+  error: ({ error }) => {
+    let message = ''
+    if (error instanceof Error) message = error.message
+    return <h1>에러가 발생했어유...😱 {message}</h1>
+  },
+  loading: <Loader />
+}
+
+const Home = dynamic(() => import('@/routes/pages/Home'), options)
+const About = dynamic(() => import('@/routes/pages/About'), options)
+const SignIn = dynamic(() => import('@/routes/pages/SignIn'), options)
+const Movies = dynamic(() => import('@/routes/pages/Movies'), options)
+const MovieDetails = dynamic(
+  () => import('@/routes/pages/MovieDetails'),
+  options
+)
+const NotFound = dynamic(() => import('@/routes/pages/NotFound'), options)
 
 // http:://localhost:5173/ => /index.html
 // http:://localhost:5173/about => /about/index.html => 리다이렉트 => /index.html
@@ -29,19 +44,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: (
-          <Suspense fallback={<Loader />}>
-            <Home />
-          </Suspense>
-        )
+        element: <Home />
       },
       {
         path: '/about',
-        element: (
-          <Suspense fallback={<Loader />}>
-            <About />
-          </Suspense>
-        )
+        element: <About />
       },
       {
         path: '/signin',

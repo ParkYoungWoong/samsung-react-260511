@@ -5,7 +5,7 @@ interface Context {
   request: Request
 }
 
-export function requiresAuth({ request }: Context) {
+export default function requiresAuth({ request }: Context) {
   const url = new URL(request.url) // 'http:://localhost:5173/movies'
   if (validateUser()) {
     return true
