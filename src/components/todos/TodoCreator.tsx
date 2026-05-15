@@ -4,7 +4,7 @@ import Button from '@/components/Button'
 
 export default function TodoCreator() {
   const title = useTodoStore(s => s.title)
-  const isLoading = useTodoStore(s => s.isLoading)
+  const isLoading = useTodoStore(s => s.isLoadingForCreate)
   const setTitle = useTodoStore(s => s.setTitle)
   const createTodo = useTodoStore(s => s.createTodo)
 
@@ -22,6 +22,7 @@ export default function TodoCreator() {
         placeholder="할 일을 입력하세요~😘"
       />
       <Button
+        loading={isLoading}
         disabled={isLoading}
         onClick={() => createTodo()}>
         추가

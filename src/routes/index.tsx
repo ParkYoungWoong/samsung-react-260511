@@ -20,7 +20,12 @@ const options: DynamicOptions = {
     if (error instanceof Error) message = error.message
     return <h1>에러가 발생했어유...😱 {message}</h1>
   },
-  loading: <Loader />
+  loading: (
+    <Loader
+      size={100}
+      weight={6}
+    />
+  )
 }
 
 const Home = dynamic(() => import('@/routes/pages/Home'), options)
