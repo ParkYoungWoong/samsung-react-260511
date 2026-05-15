@@ -9,8 +9,10 @@ interface Props {
 export default function TodoItem({ todo }: Props) {
   const [isEditMode, setIsEditMode] = useState(false)
   const [title, setTitle] = useState(todo.title)
+  const [done, setDone] = useState(todo.done)
   const inputRef = useRef<HTMLInputElement>(null)
   const updateTodo = useTodoStore(s => s.updateTodo)
+  const deleteTodo = useTodoStore(s => s.deleteTodo)
 
   useEffect(() => {
     if (isEditMode) {
@@ -18,12 +20,21 @@ export default function TodoItem({ todo }: Props) {
     }
   }, [isEditMode])
 
+  useEffect(() => {
+    if (done === todo.done) return
+    updateTodo({
+      ...todo,
+      done
+    })
+    // eslint-disable-next-line
+  }, [done])
+
   function onEditMode() {
     setIsEditMode(true)
   }
-  function offEditMode() {
+  function offEditMode(isSave: boolean = false) {
     setIsEditMode(false)
-    setTitle(todo.title)
+    if (!isSave) setTitle(todo.title)
   }
   function saveTodo() {
     if (!title.trim()) return
@@ -33,18 +44,19 @@ export default function TodoItem({ todo }: Props) {
       title,
       done: todo.done
     })
-    offEditMode()
+    offEditMode(true)
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 hover:bg-gray-100">
+      <input
+        type="checkbox"
+        checked={done}
+        onChange={e => setDone(e.target.checked)}
+      />
       {isEditMode ? (
         // 수정 모드
         <>
-          <input
-            type="checkbox"
-            checked={todo.done}
-          />
           <input
             ref={inputRef}
             type="text"
@@ -58,15 +70,11 @@ export default function TodoItem({ todo }: Props) {
           />
           <button onClick={() => offEditMode()}>취소</button>
           <button onClick={() => saveTodo()}>저장</button>
-          <button>삭제</button>
+          <button onClick={() => deleteTodo(todo)}>삭제</button>
         </>
       ) : (
         // 일반 모드
         <>
-          <input
-            type="checkbox"
-            checked={todo.done}
-          />
           <h3 className="grow">{todo.title}</h3>
           <button onClick={() => onEditMode()}>수정</button>
         </>
