@@ -12,7 +12,9 @@ export default function TodoItem({ todo }: Props) {
   const [done, setDone] = useState(todo.done)
   const inputRef = useRef<HTMLInputElement>(null)
   const updateTodo = useTodoStore(s => s.updateTodo)
-  const deleteTodo = useTodoStore(s => s.deleteTodo)
+  const deleteTodo = useTodoStore(function (state) {
+    return state.deleteTodo
+  })
 
   useEffect(() => {
     if (isEditMode) {
@@ -48,7 +50,7 @@ export default function TodoItem({ todo }: Props) {
   }
 
   return (
-    <div className="flex items-center gap-2 hover:bg-gray-100">
+    <div className="flex items-center gap-2 hover:bg-red-500">
       <input
         type="checkbox"
         checked={done}

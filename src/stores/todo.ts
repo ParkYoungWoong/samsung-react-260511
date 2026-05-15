@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { combine } from 'zustand/middleware'
+import { combine, subscribeWithSelector } from 'zustand/middleware'
 import axios from 'axios'
 
 export interface Todo {
@@ -10,8 +10,7 @@ export interface Todo {
   createdAt: string // 할 일 생성일
   updatedAt: string // 할 일 수정일
 }
-
-// '/abc123'
+export type FilterStatus = 'all' | 'todo' | 'done'
 
 const api = axios.create({
   baseURL: 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
@@ -23,63 +22,90 @@ const api = axios.create({
 })
 
 export const useTodoStore = create(
-  combine(
-    {
-      todos: [] as Todo[],
-      title: '',
-      isLoadingForFetch: false,
-      isLoadingForCreate: false
-    },
-    (set, get) => {
-      function setTitle(title: string) {
-        // set({ title: title })
-        set({ title })
-      }
-      async function fetchTodos() {
-        try {
-          set({ isLoadingForFetch: true })
-          const { data } = await api.get('')
-          set({
-            todos: data || []
+  subscribeWithSelector(
+    combine(
+      {
+        filterStatus: 'all' as FilterStatus,
+        filteredTodos: [] as Todo[],
+        todos: [] as Todo[],
+        title: '',
+        isLoadingForFetch: false,
+        isLoadingForCreate: false
+      },
+      (set, get) => {
+        function setFilterStatus(filterStatus: FilterStatus) {
+          set({ filterStatus })
+        }
+        function setTitle(title: string) {
+          // set({ title: title })
+          set({ title })
+        }
+        async function fetchTodos() {
+          try {
+            set({ isLoadingForFetch: true })
+            const { data } = await api.get('')
+            set({
+              todos: data || []
+            })
+          } catch (error) {
+            console.log('가져오기 에러:', error)
+          } finally {
+            set({ isLoadingForFetch: false })
+          }
+        }
+        async function createTodo() {
+          const { title } = get()
+          if (!title.trim()) return
+          try {
+            set({ isLoadingForCreate: true }) // 로딩 시작
+            await api.post('', { title })
+            setTitle('')
+            fetchTodos()
+          } catch (error) {
+            console.log('생성 에러:', error)
+          } finally {
+            set({ isLoadingForCreate: false }) // 로딩 종료
+          }
+        }
+        async function updateTodo(todo: Todo) {
+          await api.put(`/${todo.id}`, {
+            title: todo.title,
+            done: todo.done
           })
-        } catch (error) {
-          console.log('가져오기 에러:', error)
-        } finally {
-          set({ isLoadingForFetch: false })
-        }
-      }
-      async function createTodo() {
-        const { title } = get()
-        if (!title.trim()) return
-        try {
-          set({ isLoadingForCreate: true }) // 로딩 시작
-          await api.post('', { title })
-          setTitle('')
           fetchTodos()
-        } catch (error) {
-          console.log('생성 에러:', error)
-        } finally {
-          set({ isLoadingForCreate: false }) // 로딩 종료
+        }
+        async function deleteTodo(todo: Todo) {
+          await api.delete(`/${todo.id}`)
+          fetchTodos()
+        }
+        return {
+          setFilterStatus,
+          setTitle,
+          fetchTodos,
+          createTodo,
+          updateTodo,
+          deleteTodo
         }
       }
-      async function updateTodo(todo: Todo) {
-        await api.put(`/${todo.id}`, {
-          title: todo.title,
-          done: todo.done
-        })
-        fetchTodos()
-      }
-      async function deleteTodo(todo: Todo) {
-        await api.delete(`/${todo.id}`)
-        fetchTodos()
-      }
-      return {
-        setTitle,
-        fetchTodos,
-        createTodo,
-        updateTodo,
-        deleteTodo
-      }
-    }
+    )
   )
 )
+
+function updateFilteredTodos() {
+  const { todos, filterStatus } = useTodoStore.getState()
+  useTodoStore.setState({
+    filteredTodos: todos.filter(todo => {
+      switch (filterStatus) {
+        case 'todo':
+          return !todo.done
+        case 'done':
+          return todo.done
+        default:
+          return true
+      }
+    })
+  })
+}
+
+useTodoStore.subscribe(state => state.todos, updateFilteredTodos)
+useTodoStore.subscribe(state => state.filterStatus, updateFilteredTodos)
