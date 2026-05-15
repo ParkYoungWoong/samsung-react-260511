@@ -24,24 +24,39 @@ export const useTodoStore = create(
   combine(
     {
       todos: [] as Todo[],
-      title: ''
+      title: '',
+      isLoading: false
     },
-    (set, get) => ({
-      setTitle(title: string) {
+    (set, get) => {
+      function setTitle(title: string) {
         // set({ title: title })
         set({ title })
-      },
-      async fetchTodos() {
+      }
+      async function fetchTodos() {
         const { data } = await api.get('')
         set({
           todos: data || []
         })
-      },
-      async createTodo() {
+      }
+      async function createTodo() {
         const { title } = get()
         if (!title.trim()) return
-        const todo = await api.post('', { title })
+        try {
+          set({ isLoading: true }) // 로딩 시작
+          await api.post('', { title })
+          setTitle('')
+          await fetchTodos()
+        } catch (error) {
+          console.log('생성 에러:', error)
+        } finally {
+          set({ isLoading: false }) // 로딩 종료
+        }
       }
-    })
+      return {
+        setTitle,
+        fetchTodos,
+        createTodo
+      }
+    }
   )
 )
