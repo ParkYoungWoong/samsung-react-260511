@@ -3,3 +3,4 @@ const object = {
   age: 85,
   'is-valid!@#!&@!~~@#$&😭': true
 }
+console.log(object)

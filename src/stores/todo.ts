@@ -11,25 +11,36 @@ interface Todo {
   updatedAt: string // 할 일 수정일
 }
 
+const api = axios.create({
+  baseURL: 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
+  headers: {
+    'content-type': 'application/json',
+    apikey: 'KDT8_bcAWVpD8',
+    username: 'KDT8_ParkYoungWoong'
+  }
+})
+
 export const useTodoStore = create(
   combine(
     {
-      todos: [] as Todo[]
+      todos: [] as Todo[],
+      title: ''
     },
-    set => ({
+    (set, get) => ({
+      setTitle(title: string) {
+        // set({ title: title })
+        set({ title })
+      },
       async fetchTodos() {
-        const { data } = await axios({
-          url: 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
-          method: 'GET',
-          headers: {
-            'content-type': 'application/json',
-            apikey: 'KDT8_bcAWVpD8',
-            username: 'KDT8_ParkYoungWoong'
-          }
-        })
+        const { data } = await api.get('')
         set({
           todos: data || []
         })
+      },
+      async createTodo() {
+        const { title } = get()
+        if (!title.trim()) return
+        const todo = await api.post('', { title })
       }
     })
   )
